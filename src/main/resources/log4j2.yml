@@ -1,23 +1,30 @@
 Configuration:
   status: warn
 
+  properties:
+    property:
+      - name: log-path
+        value: log
+
   appenders:
     Console:
       name: console
       PatternLayout:
-        Pattern: "[%-5level] %d{yyyy-MM-dd HH:mm:ss.SSS} [%t] %c{1} - %msg%n"
+        Pattern: '%clr{%d{yyyy-MM-dd HH:mm:ss.SSS}}{faint} %clr{%5p} %clr{%pid}{magenta} %clr{---}{faint} %clr{[%15.15t]}{faint} %clr{%-40.40c{1.}}{cyan} %clr{:}{faint} %m%n%xwEx'
+      target: SYSTEM_OUT
+      follow: true
 
     RollingFile:
       - name: file
-        fileName: log/sandbox-spring-boot.log
+        fileName: ${log-path}/sandbox-spring-boot.log
         filePattern: "logs/$${date:yyyy-MM}/app-%d{MM-dd-yyyy}-%i.log.gz"
         PatternLayout:
-          pattern: "[%-5level] %d{yyyy-MM-dd HH:mm:ss.SSS} [%t] %c{1} - %msg%n"
+          pattern: "%d{yyyy-MM-dd HH:mm:ss.SSS} %5p %pid --- [%t] %-40.40c{1.} : %m%n%xwEx"
         Policies:
           SizeBasedTriggeringPolicy:
             size: 10MB
         DefaultRollOverStrategy:
-          max: 10
+          max: 50
 
   Loggers:
     Root:
