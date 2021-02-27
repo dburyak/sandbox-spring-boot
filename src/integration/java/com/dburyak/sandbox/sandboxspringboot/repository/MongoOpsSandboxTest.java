@@ -2,6 +2,7 @@ package com.dburyak.sandbox.sandboxspringboot.repository;
 
 import com.dburyak.sandbox.sandboxspringboot.MongoIntegrationTest;
 import com.dburyak.sandbox.sandboxspringboot.domain.User;
+import com.mongodb.client.result.DeleteResult;
 import com.mongodb.client.result.UpdateResult;
 import lombok.extern.log4j.Log4j2;
 import org.junit.jupiter.api.BeforeEach;
@@ -115,6 +116,27 @@ public class MongoOpsSandboxTest extends MongoIntegrationTest {
                 .assertNext(does -> assertThat(does)
                         .map(User::getCity)
                         .containsOnly("Barcelona")
+                )
+                .verifyComplete();
+    }
+
+    @Test
+    void removeUsers_WhereSalaryGreaterThan() {
+        printAllUsersInDb();
+        var removeUsersSalaryGreaterThan119 = mongo.remove(query(where("salary").gt(119)), User.class)
+                .doOnNext(u -> log.debug("removed users with salary >119: numDeleted={}", u.getDeletedCount()));
+        StepVerifier.create(removeUsersSalaryGreaterThan119)
+                .assertNext(delResult -> assertThat(delResult)
+                        .extracting(DeleteResult::getDeletedCount)
+                        .isEqualTo(4L)
+                )
+                .verifyComplete();
+        log.debug("AFTER REMOVAL:");
+        printAllUsersInDb();
+        StepVerifier.create(mongo.findAll(User.class).collectList())
+                .assertNext(allUsers -> assertThat(allUsers)
+                        .map(User::getFirstName)
+                        .containsExactly("john")
                 )
                 .verifyComplete();
     }
