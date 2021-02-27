@@ -36,6 +36,7 @@ dependencies {
     annotationProcessor "org.projectlombok:lombok:${lombokVersion}"
     testCompileOnly "org.projectlombok:lombok:${lombokVersion}"
     testAnnotationProcessor "org.projectlombok:lombok:${lombokVersion}"
+    integrationAnnotationProcessor "org.projectlombok:lombok:${lombokVersion}"
 
     // testing (junit5 + mockito + testcontainers)
     testImplementation('org.springframework.boot:spring-boot-starter-test') {
@@ -49,8 +50,12 @@ dependencies {
     integrationImplementation "org.testcontainers:mongodb:${testcontainersVersion}"
 }
 
-test {
+tasks.withType(Test) {
     useJUnitPlatform()
+    testLogging {
+        events = ["passed", "failed", "skipped"]
+        exceptionFormat = "full"
+    }
 }
 
 wrapper {
