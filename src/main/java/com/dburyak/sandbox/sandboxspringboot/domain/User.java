@@ -15,9 +15,11 @@ import java.time.LocalDate;
 @ToString(callSuper = true)
 @RequiredArgsConstructor(onConstructor_ = {@PersistenceConstructor})
 @SuperBuilder(toBuilder = true)
-@Document(collation = "users")
+@Document(collection = "users")
 public class User extends PersistentVersionedEntity {
     private final String firstName;
     private final String lastName;
     private final LocalDate birthDate;
+    private final String city;
+    private final int salary;
 }

@@ -21,18 +21,19 @@ public class UserRepositoryTest extends MongoIntegrationTest {
     @Test
     void insertUsers() {
         var users = List.of(
-                new User("john", "doe", LocalDate.of(1989, JULY, 27)),
-                new User("jane", "doe", LocalDate.of(1989, JULY, 26)),
-                new User("jack", "smith", LocalDate.of(1989, JULY, 25)),
-                new User("rick", "sanchez", LocalDate.of(1989, JULY, 24)),
-                new User("morty", "smith", LocalDate.of(1989, JULY, 23))
+                new User("john", "doe", LocalDate.of(1989, JULY, 27), "Chicago", 100),
+                new User("jane", "doe", LocalDate.of(1989, JULY, 26), "Washington", 120),
+                new User("jack", "smith", LocalDate.of(1989, JULY, 25), "Madrid", 140),
+                new User("rick", "sanchez", LocalDate.of(1989, JULY, 24), "Kyiv", 160),
+                new User("morty", "smith", LocalDate.of(1989, JULY, 23), "Malaga", 180)
         );
         var firstNames = users.stream().map(User::getFirstName).collect(Collectors.toList());
         var savedUsers = userRepository.saveAll(users).cache();
         StepVerifier.create(savedUsers.collectList())
                 .assertNext(s -> assertThat(s)
                         .map(User::getFirstName)
-                        .containsExactlyElementsOf(firstNames))
+                        .containsExactlyElementsOf(firstNames)
+                )
                 .verifyComplete();
     }
 }
