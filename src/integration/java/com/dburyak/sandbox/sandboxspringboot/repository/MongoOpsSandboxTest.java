@@ -2,11 +2,15 @@ package com.dburyak.sandbox.sandboxspringboot.repository;
 
 import com.dburyak.sandbox.sandboxspringboot.MongoIntegrationTest;
 import com.dburyak.sandbox.sandboxspringboot.domain.User;
+import com.mongodb.client.MongoClient;
 import com.mongodb.client.result.DeleteResult;
 import com.mongodb.client.result.UpdateResult;
 import lombok.extern.log4j.Log4j2;
+import org.bson.Document;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Update;
 import reactor.test.StepVerifier;
 
@@ -27,6 +31,9 @@ import static org.springframework.data.mongodb.core.query.Query.query;
 
 @Log4j2
 public class MongoOpsSandboxTest extends MongoIntegrationTest {
+
+    @Autowired
+    private MongoClient mongoClient;
 
     private List<User> initialUsers = List.of(
             new User("john", "doe", LocalDate.of(1989, JULY, 27), "Chicago", 100),
@@ -139,5 +146,12 @@ public class MongoOpsSandboxTest extends MongoIntegrationTest {
                         .containsExactly("john")
                 )
                 .verifyComplete();
+    }
+
+    @Test
+    void listDatabases() {
+        var mongo = new MongoTemplate(mongoClient, "admin");
+        var databasesInfoJson  = mongo.executeCommand(Document.parse("{\"listDatabases\": 1}")).toJson();
+        log.info("databases info json:\n{}", databasesInfoJson);
     }
 }
