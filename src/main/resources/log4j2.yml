@@ -41,3 +41,9 @@ Configuration:
         AppenderRef:
           - ref: console
           - ref: file
+      - name: org.springframework.data.mongodb.core
+        level: trace
+        additivity: false
+        AppenderRef:
+          - ref: console
+          - ref: file

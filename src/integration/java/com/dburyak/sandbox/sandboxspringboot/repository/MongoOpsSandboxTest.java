@@ -7,6 +7,7 @@ import com.mongodb.client.result.DeleteResult;
 import com.mongodb.client.result.UpdateResult;
 import lombok.extern.log4j.Log4j2;
 import org.bson.Document;
+import org.bson.types.ObjectId;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,6 +15,8 @@ import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Update;
 import reactor.test.StepVerifier;
 
+import java.sql.Date;
+import java.time.Instant;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -153,5 +156,38 @@ public class MongoOpsSandboxTest extends MongoIntegrationTest {
         var mongo = new MongoTemplate(mongoClient, "admin");
         var databasesInfoJson  = mongo.executeCommand(Document.parse("{\"listDatabases\": 1}")).toJson();
         log.info("databases info json:\n{}", databasesInfoJson);
+    }
+
+    @Test
+    void objectId_Features() {
+        var id1 = new ObjectId();
+        var id1Ts = id1.getTimestamp();
+        var idLow = ObjectId.getSmallestWithDate(Date.from(Instant.now().minusSeconds(10)));
+        var idHigh = ObjectId.getSmallestWithDate(Date.from(Instant.now().plusSeconds(10)));
+        assertThat(idLow).isLessThan(idHigh);
+        assertThat(idLow.getTimestamp()).isLessThan(idHigh.getTimestamp());
+        var findAllUsersCreatedBetweenUnixTimestamps = mongo.find(query(
+                where("_id").gt(idLow).lt(idHigh)), User.class);
+        var allUsersFirstNames = initialUsers.stream()
+                .map(User::getFirstName)
+                .collect(Collectors.toList());
+        StepVerifier.create(findAllUsersCreatedBetweenUnixTimestamps.collectList())
+                .assertNext(usersCreatedInRange -> assertThat(usersCreatedInRange)
+                        .map(User::getFirstName)
+                        .containsExactlyInAnyOrderElementsOf(allUsersFirstNames)
+                )
+                .verifyComplete();
+
+        // range in past
+        idLow = ObjectId.getSmallestWithDate(Date.from(Instant.now().minusSeconds(20)));
+        idHigh = ObjectId.getSmallestWithDate(Date.from(Instant.now().minusSeconds(10)));
+        assertThat(idLow.getTimestamp()).isLessThan(idHigh.getTimestamp());
+        findAllUsersCreatedBetweenUnixTimestamps = mongo.find(query(
+                where("_id").gt(idLow).lt(idHigh)), User.class);
+        StepVerifier.create(findAllUsersCreatedBetweenUnixTimestamps.collectList())
+                .assertNext(usersCreatedInRange -> assertThat(usersCreatedInRange)
+                        .isEmpty()
+                )
+                .verifyComplete();
     }
 }
