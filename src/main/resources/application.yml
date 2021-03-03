@@ -3,3 +3,7 @@ spring:
     mongodb:
       uri: "mongodb://localhost:27017"
       database: sandbox-spring-boot
+
+mongock:
+  change-logs-scan-package:
+    - com.dburyak.sandbox.sandboxspringboot.migration
