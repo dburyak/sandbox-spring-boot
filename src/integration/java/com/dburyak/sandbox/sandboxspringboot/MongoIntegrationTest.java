@@ -23,6 +23,7 @@ import reactor.test.StepVerifier;
 @DirtiesContext
 public class MongoIntegrationTest {
     public static final String MONGO_VERSION;
+    public static final String REDIS_VERSION = "6.0.1";
 
     static {
         // TODO: read version here from application-integration-test.yml config

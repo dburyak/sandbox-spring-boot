@@ -84,7 +84,7 @@ public class MongoOpsSandboxTest extends MongoIntegrationTest {
         StepVerifier.create(findUsersOlderThan25.collectList())
                 .assertNext(usersOlderThan25 -> assertThat(usersOlderThan25)
                         .map(User::getFirstName)
-                        .containsExactlyInAnyOrder("jack", "rick", "morty")
+                        .containsExactlyInAnyOrder("jack", "jane")
                 )
                 .verifyComplete();
     }
