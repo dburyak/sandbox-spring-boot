@@ -52,7 +52,12 @@ public class MySandbox extends MongoIntegrationTest {
 
     @Test
     void test_Max() {
-        var max = userRepository.maxSalary();
-        log.info("maxSalary = {}", max);
+        var users = userRepository.findByFirstNameRegex("John");
+        // city == "Los Angeles"
+        users.get(0).toBuilder().firstName("Jane");
+
+        // <<<<<< other client: city = "New York"
+
+        userRepository.save(users.get(0));
     }
 }

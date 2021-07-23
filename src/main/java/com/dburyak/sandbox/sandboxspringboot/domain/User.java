@@ -26,4 +26,5 @@ public class User extends PersistentVersionedEntity {
     private final LocalDate birthDate;
     private final String city;
     private final int salary;
+    private final int numMonAtWork;
 }
