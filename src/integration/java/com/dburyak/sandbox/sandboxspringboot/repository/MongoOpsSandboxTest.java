@@ -39,11 +39,11 @@ public class MongoOpsSandboxTest extends MongoIntegrationTest {
     private MongoClient mongoClient;
 
     private List<User> initialUsers = List.of(
-            new User("john", "doe", LocalDate.of(1989, JULY, 27), "Chicago", 100),
-            new User("jane", "doe", LocalDate.of(1988, JUNE, 26), "Kyiv", 120),
-            new User("jack", "smith", LocalDate.of(1987, AUGUST, 25), "Washington", 125),
-            new User("rick", "sanchez", LocalDate.of(1986, SEPTEMBER, 24), "Madrid", 137),
-            new User("morty", "smith", LocalDate.of(1985, OCTOBER, 23), "Malaga", 150)
+            new User("john", "doe", LocalDate.of(1989, JULY, 27), "Chicago", 100, 1, null),
+            new User("jane", "doe", LocalDate.of(1988, JUNE, 26), "Kyiv", 120, 5, null),
+            new User("jack", "smith", LocalDate.of(1987, AUGUST, 25), "Washington", 125, 11, null),
+            new User("rick", "sanchez", LocalDate.of(1986, SEPTEMBER, 24), "Madrid", 137, 17, null),
+            new User("morty", "smith", LocalDate.of(1985, OCTOBER, 23), "Malaga", 150, 35, null)
     );
 
     private List<User> insertedUsers = Collections.synchronizedList(new ArrayList<>());

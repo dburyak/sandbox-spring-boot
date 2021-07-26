@@ -27,4 +27,5 @@ public class User extends PersistentVersionedEntity {
     private final String city;
     private final int salary;
     private final int numMonAtWork;
+    private  final Contact[] contacts;
 }
