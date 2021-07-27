@@ -4,8 +4,9 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
-import org.springframework.data.annotation.Id;
-import org.springframework.data.annotation.Version;
+import org.springframework.data.annotation.*;
+
+import java.time.LocalDateTime;
 
 @Data
 @NoArgsConstructor
@@ -18,4 +19,16 @@ public class PersistentVersionedEntity {
 
     @Version
     private long version;
+
+    @CreatedBy
+    private AuditUser creator;
+
+    @LastModifiedBy
+    private AuditUser changer;
+
+    @CreatedDate
+    private LocalDateTime creationTime;
+
+    @LastModifiedDate
+    private LocalDateTime lastModificationTime;
 }

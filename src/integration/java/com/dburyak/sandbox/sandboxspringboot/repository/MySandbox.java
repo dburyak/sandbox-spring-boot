@@ -29,6 +29,7 @@ public class MySandbox extends MongoIntegrationTest {
 
     @BeforeEach
     void setup() {
+        System.err.println("mongo url: "+MONGO_CONTAINER.getReplicaSetUrl());
         mongoTemplate.insert(new User("John", "Wick", LocalDate.of(2094, 7, 1), "Minsk", 100, 24, new Contact[]{new Contact().builder().type("phone").value("2464765545747").build()}));
         mongoTemplate.insert(new User("Naruto", "Uzumaki",LocalDate.of(1997,2,12),"Konoha", 120, 17,null));
         mongoTemplate.insert(new User("Han", "Solo",LocalDate.of(1964,2,12),"Nabu", 30, 20,null));
@@ -59,14 +60,20 @@ public class MySandbox extends MongoIntegrationTest {
     }
 
     @Test
-    void test_Max() {
+    void test_Max() throws InterruptedException {
+        //Thread.sleep(89999);
         var users = userRepository.findByFirstNameRegex("John");
         // city == "Los Angeles"
         users.get(0).toBuilder().firstName("Jane");
 
         // <<<<<< other client: city = "New York"
 
+        log.info(users.get(0));
+
         userRepository.save(users.get(0));
+        userRepository.findAll().forEach(System.err::println);
+
+        userRepository.updateFirstName(users.get(0).getId(),"Johnathan");
 
 
     }

@@ -13,9 +13,9 @@ public class Changelog_001 {
     @ChangeSet(order = "001", id = "insert admin user", author = "dmytro.buryak@gmail.com")
     public void insertAdminUser(MongoDatabase mongo) {
         log.info("running mongock changeset: insert admin user");
-        mongo.getCollection("users").insertOne(Document.parse("{ " +
+        /*mongo.getCollection("users").insertOne(Document.parse("{ " +
                 "firstName: \"admin\", " +
                 "lastName: \"admin\"" +
-                "}"));
+                "}"));*/
     }
 }

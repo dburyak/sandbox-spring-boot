@@ -20,6 +20,7 @@ import static com.dburyak.sandbox.sandboxspringboot.domain.User.COLLECTION_NAME;
 @Document(collection = COLLECTION_NAME)
 public class User extends PersistentVersionedEntity {
     public static final String COLLECTION_NAME = "users";
+    public static final String EMBEDDED_COLLECTION_NAME = "contacts";
 
     private final String firstName;
     private final String lastName;

@@ -60,6 +60,7 @@ public class UserRepositoryCustomQueriesImpl implements UserRepositoryCustomQuer
     public List<User> userWithContactInfo() {
         /*
         )*/
+
         return null;
     }
 
