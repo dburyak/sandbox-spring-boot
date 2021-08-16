@@ -4,6 +4,9 @@ spring:
       uri: "mongodb://localhost:27017"
       database: sandbox-spring-boot
 
+some-config:
+  enabled: ${SOME_CONFIG_ENABLED:false}
+
 mongock:
   change-logs-scan-package:
     - com.dburyak.sandbox.sandboxspringboot.migration

@@ -50,6 +50,7 @@ public class MongoOpsSandboxTest extends MongoIntegrationTest {
 
     @BeforeEach
     void initUsers() {
+        log.info("mongo url: {}", MONGO_CONTAINER.getReplicaSetUrl());
         var firstNames = initialUsers.stream().map(User::getFirstName).collect(Collectors.toList());
         StepVerifier.create(mongo.insertAll(initialUsers).collectList())
                 .assertNext(insertedUsers -> {
